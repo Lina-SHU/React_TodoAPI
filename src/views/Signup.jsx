@@ -2,6 +2,10 @@ const { VITE_APP_HOST } = import.meta.env;
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -25,8 +29,23 @@ const Signup = () => {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_up`, formData);
             // 當註冊成功轉址到登入頁
             navigate('/auth/sign_in');
+            MySwal.fire({
+                title: '註冊成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
         } catch (error) {
-            alert(error)
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
         }
     }
     return (<>

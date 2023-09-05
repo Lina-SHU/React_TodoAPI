@@ -3,6 +3,10 @@ const { VITE_APP_HOST } = import.meta.env;
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import emptyLogo from'../assets/empty1.png';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const Todo = () => {
     const navigate = useNavigate();
@@ -50,8 +54,23 @@ const Todo = () => {
             const res = await axios.post(`${VITE_APP_HOST}/todos`, newTodo);
             getTodoList();
             setNewTodo({});
+            MySwal.fire({
+                title: '新增成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
         } catch (error) {
-            alert(error)
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
         }
     }
     // 編輯 todo 狀態
@@ -59,8 +78,23 @@ const Todo = () => {
         try {
             const res = await axios.patch(`${VITE_APP_HOST}/todos/${id}/toggle`);
             getTodoList();
+            MySwal.fire({
+                title: '編輯成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
         } catch (error) {
-            alert(error);
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
         }
     }
     // 刪除 todo
@@ -69,8 +103,23 @@ const Todo = () => {
         try {
             const res = await axios.delete(`${VITE_APP_HOST}/todos/${id}`);
             getTodoList();
+            MySwal.fire({
+                title: '刪除成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
         } catch (error) {
-            alert(error);
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
         }
     }
     // 切換 tab
@@ -96,8 +145,23 @@ const Todo = () => {
         try {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_out`);
             navigate('/auth/sign_in');
+            MySwal.fire({
+                title: '登出成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
         } catch (error) {
-            alert(error)
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
         }
     }
     return (<>
