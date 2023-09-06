@@ -28,8 +28,9 @@ const Signin = () => {
         setIsLoading(true);
         try {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_in`, formData);
-            const { token } = res.data;
+            const { token, nickname } = res.data;
             document.cookie = `token=${token}; path=/;`
+            localStorage.setItem('nickname', nickname);
             navigate('/todo');
             MySwal.fire({
                 title: '登入成功',
@@ -56,7 +57,7 @@ const Signin = () => {
             <h2 className="formControls_txt">最實用的線上代辦事項服務</h2>
             <label className="formControls_label" htmlFor="email">Email</label>
             <input className="formControls_input" type="text" id="email" name="email" placeholder="請輸入 email" required onChange={handleChange} />
-            <span>此欄位不可留空</span>
+            {/* <span>此欄位不可留空</span> */}
             <label className="formControls_label" htmlFor="pwd">密碼</label>
             <input className="formControls_input" type="password" name="password" id="pwd" placeholder="請輸入密碼" autoComplete="true" required onChange={handleChange} />
             <button className="formControls_btnSubmit" type="submit" disabled={isLoading}>登入</button>

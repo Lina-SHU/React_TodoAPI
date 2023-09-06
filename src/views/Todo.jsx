@@ -10,6 +10,8 @@ const MySwal = withReactContent(Swal);
 
 const Todo = () => {
     const navigate = useNavigate();
+
+    const [nickname, setNickName] = useState('');
     useEffect(() => {
         (async () => {
             try {
@@ -23,6 +25,7 @@ const Todo = () => {
                     navigate('/auth/sign_in');
                 }
                 const res = await axios.get(`${VITE_APP_HOST}/users/checkout`);
+                setNickName(localStorage.getItem('nickname'));
                 getTodoList();
             } catch (error) {
                 setTimeout(() => navigate('/auth/sign_in'), 2000);
@@ -43,7 +46,7 @@ const Todo = () => {
         }
     }
     // 新增 todo
-    const [newTodo, setNewTodo] = useState({});
+    const [newTodo, setNewTodo] = useState({ content: ''});
     const handleNewTodo = (e) => {
         const {name, value} = e.target;
         setNewTodo({...newTodo, [name]: value});
@@ -53,7 +56,7 @@ const Todo = () => {
         try {
             const res = await axios.post(`${VITE_APP_HOST}/todos`, newTodo);
             getTodoList();
-            setNewTodo({});
+            setNewTodo({ content: ''});
             MySwal.fire({
                 title: '新增成功',
                 icon: 'success',
@@ -122,6 +125,36 @@ const Todo = () => {
             })
         }
     }
+    // 刪除所有已完成項目
+    const removeDoneAll = async (e) => {
+        e.preventDefault();
+        const filterDone = todoList.filter((item) => item.status);
+        const ary = [];
+        filterDone.forEach((item) => {
+            ary.push(axios.delete(`${VITE_APP_HOST}/todos/${item.id}`));
+        })
+
+        Promise.all(ary).then((res) => {
+            MySwal.fire({
+                title: '清除成功',
+                icon: 'success',
+                toast: true,
+                showConfirmButton: false,
+                timer: 2000
+            })
+            getTodoList();
+        }).catch((error) => {
+            let text = [];
+            error.response.data.message.forEach((item) => {
+                text.push(item)
+            })
+            MySwal.fire({
+                title: `${text}`,
+                icon: 'error',
+                toast: true
+            })
+        })
+    }
     // 切換 tab
     const [tab, setTab] = useState('');
     const changeTabs = (e, tab) => {
@@ -152,6 +185,7 @@ const Todo = () => {
                 showConfirmButton: false,
                 timer: 2000
             })
+            localStorage.removeItem('nickname');
         } catch (error) {
             let text = [];
             error.response.data.message.forEach((item) => {
@@ -169,14 +203,14 @@ const Todo = () => {
             <nav>
                 <h1><a href="#">ONLINE TODO LIST</a></h1>
                 <ul>
-                    <li className="todo_sm"><a href="#"><span>王小明的代辦</span></a></li>
+                    <li className="todo_sm"><a href="#"><span>{nickname} 的待辦</span></a></li>
                     <li><a href="#" onClick={logout}>登出</a></li>
                 </ul>
             </nav>
             <div className="conatiner todoListPage vhContainer">
                 <div className="todoList_Content">
                     <div className="inputBox">
-                        <input type="text" name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo}/>
+                        <input type="text" value={newTodo.content} name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo}/>
                         <a href="#" onClick={addTodo}>
                             <i className="fa fa-plus"></i>
                         </a>
@@ -206,8 +240,8 @@ const Todo = () => {
                                         }
                                     </ul>
                                     <div className="todoList_statistics">
-                                        <p> {todoList.filter((item) => item.status).length || 0} 個已完成項目</p>
-                                        <a href="#">清除已完成項目</a>
+                                        <p> {todoList.filter((item) => !item.status).length || 0} 個待完成項目</p>
+                                        <a href="#" onClick={removeDoneAll}>清除已完成項目</a>
                                     </div>
                                 </div>
                             </div>
