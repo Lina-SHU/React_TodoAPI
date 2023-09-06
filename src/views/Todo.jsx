@@ -143,6 +143,7 @@ const Todo = () => {
                 timer: 2000
             })
             getTodoList();
+            changeTabs(e, '');
         }).catch((error) => {
             let text = [];
             error.response.data.message.forEach((item) => {
@@ -203,7 +204,7 @@ const Todo = () => {
             <nav>
                 <h1><a href="#">ONLINE TODO LIST</a></h1>
                 <ul>
-                    <li className="todo_sm"><a href="#"><span>{nickname} 的待辦</span></a></li>
+                    <li className="todo_sm"><span>{nickname} 的待辦</span></li>
                     <li><a href="#" onClick={logout}>登出</a></li>
                 </ul>
             </nav>
