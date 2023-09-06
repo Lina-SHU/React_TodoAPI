@@ -18,15 +18,18 @@ function App() {
     <>
       <Routes>
         {/* 路由表 */}
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Auth />}>
+          <Route path="" element={<Signin/>} />
+          <Route path="sign_up" element={<Signup/>} />
+        </Route>
 
         {/* /auth 共用版型 */}
         {/* /auth/signup */}
         {/* /auth/signin */}
-        <Route path='/auth' element={<Auth/>}>
+        {/* <Route path='/auth' element={<Auth/>}>
           <Route path="sign_up" element={<Signup/>} />
           <Route path="sign_in" element={<Signin/>} />
-        </Route>
+        </Route> */}
 
         <Route path='/todo' element={<Todo/>} />
         <Route path="*" element={<NotFound/>} />

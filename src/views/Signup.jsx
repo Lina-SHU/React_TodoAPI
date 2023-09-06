@@ -28,7 +28,7 @@ const Signup = () => {
         try {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_up`, formData);
             // 當註冊成功轉址到登入頁
-            navigate('/auth/sign_in');
+            navigate('/');
             MySwal.fire({
                 title: '註冊成功',
                 icon: 'success',
@@ -60,7 +60,7 @@ const Signup = () => {
             <label className="formControls_label" htmlFor="pwdcheck">再次輸入密碼</label>
             <input className="formControls_input" type="password" name="pwd" id="pwdcheck" placeholder="請再次輸入密碼" autoComplete="true" required onChange={handleChange} />
             <button className="formControls_btnSubmit" type="submit">註冊帳號</button>
-            <NavLink className="formControls_btnLink" to="/auth/sign_in">登入</NavLink>
+            <NavLink className="formControls_btnLink" to="/">登入</NavLink>
         </form>
     </>)
 }

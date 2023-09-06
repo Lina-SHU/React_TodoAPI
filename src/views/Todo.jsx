@@ -22,13 +22,13 @@ const Todo = () => {
                 if (cookieValue) {
                     axios.defaults.headers.common['Authorization'] = cookieValue
                 } else {
-                    navigate('/auth/sign_in');
+                    navigate('/');
                 }
                 const res = await axios.get(`${VITE_APP_HOST}/users/checkout`);
                 setNickName(localStorage.getItem('nickname'));
                 getTodoList();
             } catch (error) {
-                setTimeout(() => navigate('/auth/sign_in'), 2000);
+                setTimeout(() => navigate('/'), 2000);
             }
         })();
     }, []);
@@ -177,7 +177,7 @@ const Todo = () => {
         e.preventDefault();
         try {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_out`);
-            navigate('/auth/sign_in');
+            navigate('/');
             MySwal.fire({
                 title: '登出成功',
                 icon: 'success',

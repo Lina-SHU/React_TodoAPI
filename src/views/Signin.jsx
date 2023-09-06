@@ -61,7 +61,7 @@ const Signin = () => {
             <label className="formControls_label" htmlFor="pwd">密碼</label>
             <input className="formControls_input" type="password" name="password" id="pwd" placeholder="請輸入密碼" autoComplete="true" required onChange={handleChange} />
             <button className="formControls_btnSubmit" type="submit" disabled={isLoading}>登入</button>
-            <NavLink className="formControls_btnLink" to="/auth/sign_up">註冊帳號</NavLink>
+            <NavLink className="formControls_btnLink" to="/sign_up">註冊帳號</NavLink>
         </form>
     </>)
 }
