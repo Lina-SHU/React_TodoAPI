@@ -64,6 +64,7 @@ const Todo = () => {
                 showConfirmButton: false,
                 timer: 2000
             })
+            changeTabs(e, '');
         } catch (error) {
             let text = [];
             error.response.data.message.forEach((item) => {
@@ -211,7 +212,7 @@ const Todo = () => {
             <div className="conatiner todoListPage vhContainer">
                 <div className="todoList_Content">
                     <div className="inputBox">
-                        <input type="text" value={newTodo.content} name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo}/>
+                        <input type="text" value={newTodo.content} name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo} onKeyPress={addTodo}/>
                         <a href="#" onClick={addTodo}>
                             <i className="fa fa-plus"></i>
                         </a>

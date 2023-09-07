@@ -37,12 +37,8 @@ const Signup = () => {
                 timer: 2000
             })
         } catch (error) {
-            let text = [];
-            error.response.data.message.forEach((item) => {
-                text.push(item)
-            })
             MySwal.fire({
-                title: `${text}`,
+                title: `${error.response.data.message}`,
                 icon: 'error',
                 toast: true
             })
