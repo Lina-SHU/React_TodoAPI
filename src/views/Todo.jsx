@@ -45,11 +45,17 @@ const Todo = () => {
             alert(error);
         }
     }
+
     // 新增 todo
     const [newTodo, setNewTodo] = useState({ content: ''});
     const handleNewTodo = (e) => {
         const {name, value} = e.target;
         setNewTodo({...newTodo, [name]: value});
+    }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            addTodo(e);
+        }
     }
     const addTodo = async (e) => {
         e.preventDefault();
@@ -77,6 +83,7 @@ const Todo = () => {
             })
         }
     }
+
     // 編輯 todo 狀態
     const checkTodo = async (id) => {
         try {
@@ -101,6 +108,7 @@ const Todo = () => {
             })
         }
     }
+
     // 刪除 todo
     const deleteTodo = async (e, id) => {
         e.preventDefault();
@@ -126,6 +134,7 @@ const Todo = () => {
             })
         }
     }
+
     // 刪除所有已完成項目
     const removeDoneAll = async (e) => {
         e.preventDefault();
@@ -157,6 +166,7 @@ const Todo = () => {
             })
         })
     }
+
     // 切換 tab
     const [tab, setTab] = useState('');
     const changeTabs = (e, tab) => {
@@ -173,7 +183,7 @@ const Todo = () => {
             setSelectedList(selected);
         }
     }
-    
+
     // 登出
     const logout = async (e) => {
         e.preventDefault();
@@ -200,6 +210,7 @@ const Todo = () => {
             })
         }
     }
+
     return (<>
         <div id="todoListPage" className="bg-half">
             <nav>
@@ -212,7 +223,7 @@ const Todo = () => {
             <div className="conatiner todoListPage vhContainer">
                 <div className="todoList_Content">
                     <div className="inputBox">
-                        <input type="text" value={newTodo.content} name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo} onKeyPress={addTodo}/>
+                        <input type="text" value={newTodo.content} name="content" placeholder="請輸入待辦事項" onChange={handleNewTodo} onKeyDown={handleKeyDown} />
                         <a href="#" onClick={addTodo}>
                             <i className="fa fa-plus"></i>
                         </a>
@@ -226,21 +237,30 @@ const Todo = () => {
                                     <li><a href="#" className={tab === 'finish'? 'active': ''} onClick={(e) => changeTabs(e, 'finish')}>已完成</a></li>
                                 </ul>
                                 <div className="todoList_items">
-                                    <ul className="todoList_item">
-                                        {
-                                            selectedList.map((todo) => {
-                                                return (<li key={todo.id}>
-                                                    <label className="todoList_label">
-                                                        <input className="todoList_input" type="checkbox" value="true" checked={todo.status} onChange={() => checkTodo(todo.id)}/>
-                                                        <span>{todo.content}</span>
-                                                    </label>
-                                                    <a href="#" onClick={(e) => deleteTodo(e, todo.id)}>
-                                                        <i className="fa fa-times"></i>
-                                                    </a>
-                                                </li>)
-                                            })
-                                        }
-                                    </ul>
+                                    {
+                                        selectedList.length ? (
+                                            <ul className="todoList_item">
+                                                {
+                                                    selectedList.map((todo) => {
+                                                        return (<li key={todo.id}>
+                                                            <label className="todoList_label">
+                                                                <input className="todoList_input" type="checkbox" value="true" checked={todo.status} onChange={() => checkTodo(todo.id)}/>
+                                                                <span>{todo.content}</span>
+                                                            </label>
+                                                            <a href="#" onClick={(e) => deleteTodo(e, todo.id)}>
+                                                                <i className="fa fa-times"></i>
+                                                            </a>
+                                                        </li>)
+                                                    })
+                                                }
+                                            </ul>
+                                        ) : (
+                                            <div className="text-center">
+                                                <p className="empty-margin-bottom">目前並無{ tab === 'finish' ?  '已完成' : '待完成'}項目</p>
+                                            </div>
+                                        )
+                                    }
+                                    
                                     <div className="todoList_statistics">
                                         <p> {todoList.filter((item) => !item.status).length || 0} 個待完成項目</p>
                                         <a href="#" onClick={removeDoneAll}>清除已完成項目</a>
