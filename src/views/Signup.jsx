@@ -25,6 +25,15 @@ const Signup = () => {
 
     const submitSignup = async (e) => {
         e.preventDefault();
+        // 密碼確認
+        if (formData.pwd !== formData.password) {
+            MySwal.fire({
+                title: '兩次密碼輸入不相符',
+                icon: 'error',
+                toast: true
+            })
+            return
+        }
         try {
             const res = await axios.post(`${VITE_APP_HOST}/users/sign_up`, formData);
             // 當註冊成功轉址到登入頁
